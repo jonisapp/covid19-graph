@@ -1,0 +1,6 @@
+[submodule "private/private/COVID-19"]
+	path = private/private/COVID-19
+	url = https://github.com/CSSEGISandData/COVID-19
+[submodule "private/COVID-19"]
+	path = private/COVID-19
+	url = https://github.com/CSSEGISandData/COVID-19
