@@ -1,0 +1,77 @@
+import React from 'react';
+import styled from 'styled-components';
+
+const FilterButtons = ({ buttons, selectedButtons, onSwitch, style, shape, buttonBorder, buttonBackgroundColor, buttonBorderColor }) => {
+  return (
+    <div className='switchButtons' style={{...styles.switchButtons, ...style}}>
+      {
+        buttons.map(button => {
+          return (
+            <FilterButton key={button.value}
+              shapeRadius={shape === 'squared' ? 5 : 18}
+              buttonBackgroundColor={buttonBackgroundColor}
+              buttonBorderColor={buttonBorderColor}
+              style={{display: 'flex', alignItems: 'center', ...(() => {
+                if(typeof selectedButtons !== 'undefined') {
+                  if(Array.isArray(selectedButtons)) {
+                    if(selectedButtons.includes(button.value)) {
+                      return styles.selected;
+                    } else { return {} }
+                  } else if(selectedButtons === button.value) {
+                    return styles.selected;
+                  } else { return {} }
+                } else { return {} }
+              })()}}
+                onClick={() => { onSwitch(button.value) }}
+              >
+                <div style={{width: '100%', textAlign: 'center'}}>{ button.label }</div>
+            </FilterButton>
+          );
+        })
+      }
+    </div>
+  );
+};
+
+const FilterButton = styled.div`
+flex: 1;
+padding: 0 7px 0 7px;
+background-color: ${({buttonBackgroundColor}) => buttonBackgroundColor};
+border-style: solid;
+border-width: 1px 0 1px 1px;
+border-color: ${({buttonBorderColor}) => buttonBorderColor};
+transition: all .3s ease;
+cursor: default;
+
+&:first-child {
+  padding-left: 14px;
+  border-radius: ${({shapeRadius}) => shapeRadius}px 0 0 ${({shapeRadius}) => shapeRadius}px;
+}
+
+&:last-child {
+  padding-right: 14px;
+  border-right: 1px solid #bbb;
+  border-radius: 0 ${({shapeRadius}) => shapeRadius}px ${({shapeRadius}) => shapeRadius}px 0;
+}
+`;
+
+const styles = {
+  switchButtons: {
+    display: 'flex',
+    height: 36
+  },
+  selected: {
+    backgroundColor: '#6C757D',
+    color: 'white',
+    textShadow: 'none'
+  }
+}
+
+FilterButtons.defaultProps = {
+  shape: 'rounded',
+  buttonBackgroundColor: '#ddd',
+  buttonBorderColor: '#bbb',
+  style: {}
+}
+
+export default FilterButtons;
