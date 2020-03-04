@@ -17,6 +17,7 @@ const App = () => {
       Object.keys(resData).forEach(key => {
         landsNames_arr.push(key);
       });
+      console.log(resData);
       setData(resData);
       setLandsNames(landsNames_arr.sort((a, b) => a < b ? -1 : 1));
     });
@@ -25,10 +26,10 @@ const App = () => {
   return(
     <div style={styles.body}>
       <div style={{height: 40}} />
-      <Toolbar style={{width: 1400, marginLeft: 'auto', marginRight: 'auto', marginBottom: 40}}>
+      <Toolbar style={{width: 1100, marginLeft: 'auto', marginRight: 'auto', marginBottom: 40}}>
         <FilterButtons
           shape='squared'
-          style={{width: 250}}
+          style={{width: 200}}
           buttons={[
             {value: 'find', label: 'Trouver'},
             {value: 'compare', label: 'Comparer'}
@@ -41,7 +42,7 @@ const App = () => {
         {
           mode === 'compare' &&
             <FilterButtons
-              style={{width: 400}}
+              style={{width: 300}}
               buttons={[
                 {value: 'Confirmés', label: 'Confirmés'},
                 {value: 'Récupéré', label: 'Récupéré'},
@@ -86,9 +87,11 @@ const App = () => {
         }
       </div>
       <div style={{marginTop: 40, paddingBottom: 40, textAlign: 'center'}}>
-        Les données proviennent de l'<b>OMS</b> (Organisation mondiale de la Santé) - Certaines statistiques sont susceptibles d'être inexactes (sources multiples) voire absentes.<br /><br />Avez-vous besoin d'un développeur ?
+        Les données proviennent de l'<b>OMS</b> (Organisation mondiale de la Santé) - Certaines statistiques sont susceptibles d'être inexactes (sources multiples) voire absentes.<br /><br />Avez-vous besoin d'un développeur polyvalent ? (web, mobile, server)
         <a style={{marginLeft: 10}} href='mailto:zappala.jonathan@gmail.com'>zappala.jonathan@gmail.com</a>&nbsp;-&nbsp;
-        <a href="https://www.linkedin.com/in/jonathan-zappala-575a8b14b/">Profil LinkedIn</a>
+        <a href="https://www.linkedin.com/in/jonathan-zappala-575a8b14b/">LinkedIn</a>&nbsp;-&nbsp;
+        <a href='https://www.malt.fr/profile/jonathanzappala'>Malt</a>&nbsp;-&nbsp;
+        <a href='https://www.facebook.com/jonathan.zappala.9'>Facebook</a>
       </div>
     </div>
   );
@@ -100,7 +103,7 @@ const styles = {
     height: '100%'
   },
   container: {
-    width: 1400,
+    width: 1100,
     marginLeft: 'auto',
     marginRight: 'auto',
     backgroundColor: 'white'
@@ -128,7 +131,7 @@ const Toolbar = styled.div`
   select {
     background-color: white;
     outline: none;
-    min-width: 300px;
+    min-width: 200px;
   }
 `;
 

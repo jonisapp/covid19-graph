@@ -3,6 +3,12 @@ import {
   Area, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ComposedChart, ResponsiveContainer
 } from 'recharts';
 
+const criterionsTitles = {
+  'Confirmés': 'cas confirmés',
+  'Récupéré': 'cas rétablis',
+  'Morts': 'décès'
+}
+
 export default class Chart extends PureComponent {
   render() {
     var landsDataByDates = {};
@@ -45,14 +51,20 @@ export default class Chart extends PureComponent {
       if(item.land2) { land2LastDataForCriterion = item.land2 }
       return updatedItem;
     });
-    console.log(landCompareData);
     return (
       <div className='thin-shadow' style={{width: '100%', borderWidth: 1, borderStyle: 'solid', borderColor: '#cccfdd'}}>
-        <h2 style={{textAlign: 'center', paddingTop: 20}}>COVID-19 (évolution en { this.props.land })</h2>
+        <h2 style={{textAlign: 'center', paddingTop: 20}}>
+          { this.props.mode === 'find'
+            ?
+              <React.Fragment>COVID-19 : évolution en { this.props.land }</React.Fragment>
+            :
+              <React.Fragment>COVID-19 : comparaison entre { this.props.land } et { this.props.land2 } ({ criterionsTitles[this.props.criterion] })</React.Fragment>
+          }
+          
+        </h2>
         <div style={{width: '100%', height: 530}}>
           <ResponsiveContainer>
             <ComposedChart
-              width={'100%'}
               data={this.props.mode === 'find' ? this.props.data[this.props.land] : landCompareData}
               margin={{
                 top: 5, bottom: 5, right: 40, left: 10
