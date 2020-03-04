@@ -68,7 +68,7 @@ Meteor.methods({
     var lands = {};
     getLandByMonth(22, 31, 1, lands);
     getLandByMonth(1, 29, 2, lands);
-    getLandByMonth(1, 2, 3, lands);
+    getLandByMonth(1, 3, 3, lands);
     return lands;
   }
 });

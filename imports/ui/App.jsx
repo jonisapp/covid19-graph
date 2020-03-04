@@ -86,7 +86,7 @@ const App = () => {
         }
       </div>
       <div style={{marginTop: 40, paddingBottom: 40, textAlign: 'center'}}>
-        Les données proviennent de l'<b>OMS</b> (Organisation mondiale de la Santé) - Certaines statistiques sont susceptible d'être inexactes voire absentes.<br /><br />Avez-vous besoin d'un développeur ?
+        Les données proviennent de l'<b>OMS</b> (Organisation mondiale de la Santé) - Certaines statistiques sont susceptibles d'être inexactes (sources multiples) voire absentes.<br /><br />Avez-vous besoin d'un développeur ?
         <a style={{marginLeft: 10}} href='mailto:zappala.jonathan@gmail.com'>zappala.jonathan@gmail.com</a>&nbsp;-&nbsp;
         <a href="https://www.linkedin.com/in/jonathan-zappala-575a8b14b/">Profil LinkedIn</a>
       </div>
