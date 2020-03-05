@@ -61,8 +61,8 @@ const App = () => {
               style={{width: 400}}
               buttons={[
                 {value: 'Confirmés', label: 'Confirmés'},
-                {value: 'Récupéré', label: 'Récupéré'},
-                {value: 'Morts', label: 'Morts'},
+                {value: 'Rétablis', label: 'Rétablis'},
+                {value: 'Décédés', label: 'Décédés'},
                 {value: 'Existants', label: 'Existants'}
               ]}
               selectedButtons={displayedCriterions}
@@ -83,8 +83,8 @@ const App = () => {
               style={{width: 300}}
               buttons={[
                 {value: 'Confirmés', label: 'Confirmés'},
-                {value: 'Récupéré', label: 'Récupéré'},
-                {value: 'Morts', label: 'Morts'}
+                {value: 'Rétablis', label: 'Rétablis'},
+                {value: 'Décédés', label: 'Décédés'}
               ]}
               selectedButtons={compareCriterion}
               onSwitch={(value) => {

@@ -5,8 +5,8 @@ import {
 
 const criterionsTitles = {
   'Confirmés': 'cas confirmés',
-  'Récupéré': 'cas rétablis',
-  'Morts': 'décès'
+  'Rétablis': 'cas rétablis',
+  'Décédés': 'personnes décédés'
 }
 
 
@@ -67,13 +67,13 @@ export default class Chart extends PureComponent {
     let landPreviousDeathsValue = 0;
     return Object.keys(landDataByDates).map(key => {
       landPreviousConfirmedValue = this.correctValue(landDataByDates[key]['Confirmés'], landPreviousConfirmedValue);
-      landPreviousRecoveredValue = this.correctValue(landDataByDates[key]['Récupéré'], landPreviousRecoveredValue);
-      landPreviousDeathsValue = this.correctValue(landDataByDates[key]['Morts'], landPreviousDeathsValue);
+      landPreviousRecoveredValue = this.correctValue(landDataByDates[key]['Rétablis'], landPreviousRecoveredValue);
+      landPreviousDeathsValue = this.correctValue(landDataByDates[key]['Décédés'], landPreviousDeathsValue);
       return {
         date: landDataByDates[key].date,
         'Confirmés': landPreviousConfirmedValue,
-        'Récupéré': landPreviousRecoveredValue,
-        'Morts': landPreviousDeathsValue,
+        'Rétablis': landPreviousRecoveredValue,
+        'Décédés': landPreviousDeathsValue,
         'Existants': landPreviousConfirmedValue - landPreviousRecoveredValue - landPreviousDeathsValue
       }
     });
@@ -119,11 +119,11 @@ export default class Chart extends PureComponent {
               <Legend verticalAlign='top' height={36} />
               { this.props.mode === 'find' && this.props.displayedCriterions.includes('Confirmés') &&
                 <Area strokeWidth={2} type="monotone" dataKey="Confirmés" stroke="orange" fill='url(#confirmedColor)' activeDot={{ r: 10 }} /> }
-              { this.props.mode === 'find' && this.props.displayedCriterions.includes('Récupéré') &&
-                <Line strokeWidth={2} type="monotone" dataKey="Récupéré" stroke="#82ca9d" dot={false} />
+              { this.props.mode === 'find' && this.props.displayedCriterions.includes('Rétablis') &&
+                <Line strokeWidth={2} type="monotone" dataKey="Rétablis" stroke="#82ca9d" dot={false} />
               }
-              { this.props.mode === 'find' && this.props.displayedCriterions.includes('Morts') &&
-                <Line strokeWidth={2} type="monotone" dataKey="Morts" stroke="#db5e5e" dot={false} />
+              { this.props.mode === 'find' && this.props.displayedCriterions.includes('Décédés') &&
+                <Line strokeWidth={2} type="monotone" dataKey="Décédés" stroke="#db5e5e" dot={false} />
               }
               { this.props.mode === 'find' && this.props.displayedCriterions.includes('Existants') &&
                 <Line strokeWidth={2} type="monotone" dataKey="Existants" stroke="#c775ea" dot={false} />

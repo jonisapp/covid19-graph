@@ -38,13 +38,13 @@ function getLandsByDate(month_int, day_int) {
       lands[land['Country/Region']] = {
         date: moment(land['Last Update']).format('YYYY-MM-DD'),
         'Confirmés': land.Confirmed ? parseInt(land.Confirmed) : 0,
-        'Morts': land.Deaths ? parseInt(land.Deaths) : 0,
-        'Récupéré': land.Recovered ? parseInt(land.Recovered) : 0
+        'Décédés': land.Deaths ? parseInt(land.Deaths) : 0,
+        'Rétablis': land.Recovered ? parseInt(land.Recovered) : 0
       }
     } else {
       lands[land['Country/Region']]['Confirmés'] += (land.Confirmed ? parseInt(land.Confirmed) : 0);
-      lands[land['Country/Region']]['Morts'] += (land.Deaths ? parseInt(land.Deaths) : 0);
-      lands[land['Country/Region']]['Récupéré'] += (land.Recovered ? parseInt(land.Recovered) : 0);
+      lands[land['Country/Region']]['Décédés'] += (land.Deaths ? parseInt(land.Deaths) : 0);
+      lands[land['Country/Region']]['Rétablis'] += (land.Recovered ? parseInt(land.Recovered) : 0);
     }
   });
   return lands;
