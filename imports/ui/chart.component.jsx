@@ -3,6 +3,8 @@ import {
   Area, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ComposedChart, ResponsiveContainer
 } from 'recharts';
 
+import { isMobile } from 'react-device-detect';
+
 const criterionsTitles = {
   'Confirmés': 'cas confirmés',
   'Rétablis': 'cas rétablis',
@@ -89,7 +91,7 @@ export default class Chart extends PureComponent {
 
     return (
       <div className='thin-shadow' style={{width: '100%', borderWidth: 1, borderStyle: 'solid', borderColor: '#cccfdd'}}>
-        <h2 style={{textAlign: 'center', paddingTop: 20}}>
+        <div style={{textAlign: 'center', paddingTop: 20, fontSize: !isMobile ? '1.5rem' : '3rem', width: '100%'}}>
           { this.props.mode === 'find'
             ?
               <React.Fragment>COVID-19 : évolution en { this.props.land }</React.Fragment>
@@ -97,7 +99,7 @@ export default class Chart extends PureComponent {
               <React.Fragment>COVID-19 : comparaison entre { this.props.land } et { this.props.land2 } ({ criterionsTitles[this.props.criterion] })</React.Fragment>
           }
           
-        </h2>
+        </div>
         <div style={{width: '100%', height: 530}}>
           <ResponsiveContainer>
             <ComposedChart

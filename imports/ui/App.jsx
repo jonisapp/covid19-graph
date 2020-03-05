@@ -33,10 +33,7 @@ const App = () => {
 
   if(isMobile) {
     return(
-      // <div style={{marginTop: 30, width: '100%', fontSize: 18, fontWeight: 'bold', textAlign: 'center', marginLeft: 'auto', marginRight: 'auto'}}>
-      //   Cette application n'est pas prévue pour s'afficher sur mobile.
-      // </div>
-      <div style={styles.body}>
+      <div style={{...styles.body, paddingBottom: '2rem'}}>
         <div style={styles.mobileContainer}>
           {
             data &&
@@ -55,7 +52,7 @@ const App = () => {
           <FilterButtons
             shape='squared'
             squaredRadius={10}
-            style={{marginTop: 50, width: '50%', height: '6rem', fontSize: '2rem'}}
+            style={{marginTop: 50, width: '50%', height: '7rem', fontSize: '2.5rem'}}
             buttons={[
               {value: 'find', label: 'Trouver'},
               {value: 'compare', label: 'Comparer'}
@@ -67,9 +64,22 @@ const App = () => {
           />
         </Toolbar>
         <Toolbar style={{width: '100%', marginBottom: 40, justifyContent: 'center'}}>
+          <select
+            value={selectedLand}
+            style={{width: '70%', height: '7rem', fontSize: '2.5rem', borderRadius: 5, padding: '0.5rem'}}
+            onChange={({ currentTarget: { value } }) => { setSelectedLand(value) }}
+          >
+            {
+              landsNames.map(landKey => (
+                <option key={landKey}>{ landKey }</option>
+              ))
+            }
+          </select>
+        </Toolbar>
+        <Toolbar style={{width: '100%', marginBottom: 40, justifyContent: 'center'}}>
           <FilterButtons
             roundedRadius={50}
-            style={{width: '80%', fontSize: '2rem', height: '6rem'}}
+            style={{width: '90%', fontSize: '2.5rem', height: '7rem'}}
             buttons={[
               {value: 'Confirmés', label: 'Confirmés'},
               {value: 'Rétablis', label: 'Rétablis'},
@@ -87,19 +97,6 @@ const App = () => {
               }
             }}
           />
-        </Toolbar>
-        <Toolbar style={{width: '100%', marginBottom: 40, justifyContent: 'center'}}>
-          <select
-            value={selectedLand}
-            style={{height: '6rem', fontSize: '2rem', borderRadius: 5, padding: '0.5rem'}}
-            onChange={({ currentTarget: { value } }) => { setSelectedLand(value) }}
-          >
-            {
-              landsNames.map(landKey => (
-                <option key={landKey}>{ landKey }</option>
-              ))
-            }
-          </select>
         </Toolbar>
       </div>
     );
