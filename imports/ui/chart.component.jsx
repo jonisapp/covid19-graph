@@ -9,32 +9,26 @@ const criterionsTitles = {
   'Morts': 'décès'
 }
 
+
 export default class Chart extends PureComponent {
-  render() {
-    var landsDataByDates = {};
-    const land1Data = this.props.data[this.props.land];
-    const land2Data = this.props.data[this.props.land2];
-    land1Data.map(item => {
+
+  createLandDataForCriterion(landsDataByDates, landData, criterion, key) {
+    landData.forEach(item => {
       if(typeof landsDataByDates[item.date] === 'undefined') {
         landsDataByDates[item.date] = {
-          land1: item[this.props.criterion]
+          [key]: item[criterion]
         };
       } else {
-        landsDataByDates[item.date].land1 = item[this.props.criterion]
+        landsDataByDates[item.date][key] = item[criterion];
       }
     });
-    land2Data.map(item => {
-      if(typeof landsDataByDates[item.date] === 'undefined') {
-        landsDataByDates[item.date] = {
-          land2: item[this.props.criterion]
-        };
-      } else {
-        landsDataByDates[item.date].land2 = item[this.props.criterion]
-      }
-    });
-    let land1LastDataForCriterion = 0;
-    let land2LastDataForCriterion = 0;
-    const landCompareData = Object.keys(landsDataByDates).map(key => {
+  }
+
+  createLandsCompareData(landsDataByDates) {
+    let land1LastCriterionValue = 0;
+    let land2LastCriterionValue = 0;
+
+    return Object.keys(landsDataByDates).map(key => {
       return {
         date: key,
         ...landsDataByDates[key]
@@ -44,13 +38,55 @@ export default class Chart extends PureComponent {
     .map(item => {
       const updatedItem = {
         date: item.date,
-        land1: item.land1 ? item.land1 : land1LastDataForCriterion,
-        land2: item.land2 ? item.land2 : land2LastDataForCriterion
+        land1: item.land1 ? item.land1 : land1LastCriterionValue,
+        land2: item.land2 ? item.land2 : land2LastCriterionValue
       }
-      if(item.land1) { land1LastDataForCriterion = item.land1 }
-      if(item.land2) { land2LastDataForCriterion = item.land2 }
+      if(item.land1) { land1LastCriterionValue = item.land1 }
+      if(item.land2) { land2LastCriterionValue = item.land2 }
       return updatedItem;
     });
+  }
+
+  correctValue(currentValue, previousValue) {
+    if(currentValue && currentValue >= previousValue) {
+      return currentValue;
+    } else {
+      return previousValue;
+    }
+  }
+
+  cleanLandData(landData_arr) {
+    var landDataByDates = {};
+    landData_arr.forEach(item => {
+      if(typeof landDataByDates[item.date] === 'undefined') {
+        landDataByDates[item.date] = item;
+      }
+    });
+    let landPreviousConfirmedValue = 0;
+    let landPreviousRecoveredValue = 0;
+    let landPreviousDeathsValue = 0;
+    return Object.keys(landDataByDates).map(key => {
+      landPreviousConfirmedValue = this.correctValue(landDataByDates[key]['Confirmés'], landPreviousConfirmedValue);
+      landPreviousRecoveredValue = this.correctValue(landDataByDates[key]['Récupéré'], landPreviousRecoveredValue);
+      landPreviousDeathsValue = this.correctValue(landDataByDates[key]['Morts'], landPreviousDeathsValue);
+      return {
+        date: landDataByDates[key].date,
+        'Confirmés': landPreviousConfirmedValue,
+        'Récupéré': landPreviousRecoveredValue,
+        'Morts': landPreviousDeathsValue,
+        'Existants': landPreviousConfirmedValue - landPreviousRecoveredValue - landPreviousDeathsValue
+      }
+    });
+  }
+
+  render() {
+    var landsDataByDates = {};
+    const land1Data = this.props.data[this.props.land];
+    const land2Data = this.props.data[this.props.land2];
+    this.createLandDataForCriterion(landsDataByDates, land1Data, this.props.criterion, 'land1');
+    this.createLandDataForCriterion(landsDataByDates, land2Data, this.props.criterion, 'land2');
+    const landCompareData = this.createLandsCompareData(landsDataByDates);
+
     return (
       <div className='thin-shadow' style={{width: '100%', borderWidth: 1, borderStyle: 'solid', borderColor: '#cccfdd'}}>
         <h2 style={{textAlign: 'center', paddingTop: 20}}>
@@ -65,7 +101,7 @@ export default class Chart extends PureComponent {
         <div style={{width: '100%', height: 530}}>
           <ResponsiveContainer>
             <ComposedChart
-              data={this.props.mode === 'find' ? this.props.data[this.props.land] : landCompareData}
+              data={this.props.mode === 'find' ? this.cleanLandData(this.props.data[this.props.land]) : landCompareData}
               margin={{
                 top: 5, bottom: 5, right: 40, left: 10
               }}
@@ -86,7 +122,10 @@ export default class Chart extends PureComponent {
                 <Line strokeWidth={2} type="monotone" dataKey="Récupéré" stroke="#82ca9d" dot={false} />
               }
               { this.props.mode === 'find' &&
-                <Line strokeWidth={2} type="monotone" dataKey="Morts" stroke="red" dot={false} />
+                <Line strokeWidth={2} type="monotone" dataKey="Morts" stroke="#db5e5e" dot={false} />
+              }
+              { this.props.mode === 'find' &&
+                <Line strokeWidth={1} type="monotone" dataKey="Existants" stroke="#c775ea" dot={false} />
               }
               { this.props.mode === 'compare' &&
                 <Line strokeWidth={2} type="monotone" name={`${this.props.land} (${this.props.criterion})`} dataKey="land1" stroke="#c775ea" dot={false} />
