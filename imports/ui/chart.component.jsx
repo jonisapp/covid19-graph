@@ -91,14 +91,13 @@ export default class Chart extends PureComponent {
 
     return (
       <div className='thin-shadow' style={{width: '100%', borderWidth: 1, borderStyle: 'solid', borderColor: '#cccfdd'}}>
-        <div style={{textAlign: 'center', paddingTop: 20, fontSize: !isMobile ? '1.5rem' : '3rem', width: '100%'}}>
+        <div style={{textAlign: 'center', paddingTop: 20, fontSize: !isMobile ? '1.5rem' : '3rem', width: '100%', paddingBottom: !isMobile ? 0 : '1.5rem'}}>
           { this.props.mode === 'find'
             ?
               <React.Fragment>COVID-19 : évolution en { this.props.land }</React.Fragment>
             :
               <React.Fragment>COVID-19 : comparaison entre { this.props.land } et { this.props.land2 } ({ criterionsTitles[this.props.criterion] })</React.Fragment>
           }
-          
         </div>
         <div style={{width: '100%', height: 530}}>
           <ResponsiveContainer>
@@ -118,7 +117,12 @@ export default class Chart extends PureComponent {
               <XAxis dataKey="date" />
               <YAxis />
               <Tooltip />
-              <Legend verticalAlign='top' height={36} />
+              <Legend
+                verticalAlign='top'
+                height={!isMobile ? 36 : '4rem'}
+                formatter={(value) => <span style={{fontSize: !isMobile ? '16px' : '2rem'}}>{ value }</span>}
+                iconSize={!isMobile ? 16 : '1.5rem'}
+              />
               { this.props.mode === 'find' && this.props.displayedCriterions.includes('Confirmés') &&
                 <Area strokeWidth={2} type="monotone" dataKey="Confirmés" stroke="orange" fill='url(#confirmedColor)' activeDot={{ r: 10 }} /> }
               { this.props.mode === 'find' && this.props.displayedCriterions.includes('Rétablis') &&

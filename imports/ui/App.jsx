@@ -52,6 +52,7 @@ const App = () => {
           <FilterButtons
             shape='squared'
             squaredRadius={10}
+            borderWidth={2}
             style={{marginTop: 50, width: '50%', height: '7rem', fontSize: '2.5rem'}}
             buttons={[
               {value: 'find', label: 'Trouver'},
@@ -76,28 +77,67 @@ const App = () => {
             }
           </select>
         </Toolbar>
-        <Toolbar style={{width: '100%', marginBottom: 40, justifyContent: 'center'}}>
-          <FilterButtons
-            roundedRadius={50}
-            style={{width: '90%', fontSize: '2.5rem', height: '7rem'}}
-            buttons={[
-              {value: 'Confirmés', label: 'Confirmés'},
-              {value: 'Rétablis', label: 'Rétablis'},
-              {value: 'Décédés', label: 'Décédés'},
-              {value: 'Existants', label: 'Existants'}
-            ]}
-            selectedButtons={displayedCriterions}
-            onSwitch={(value) => {
-              if(displayedCriterions.includes(value)) {
-                if(displayedCriterions.length > 1) {
-                  setDisplayedCriterions(displayedCriterions.filter(buttonValue => buttonValue !== value));
+        {
+          mode === 'compare' &&
+            <Toolbar style={{width: '100%', marginBottom: 40, justifyContent: 'center'}}>
+              <select
+                value={selectedLand2}
+                style={{width: '70%', height: '7rem', fontSize: '2.5rem', borderRadius: 5, padding: '0.5rem'}}
+                onChange={({ currentTarget: { value } }) => { setSelectedLand2(value) }}
+              >
+                {
+                  landsNames.map(landKey => (
+                    <option key={landKey}>{ landKey }</option>
+                  ))
                 }
-              } else {
-                setDisplayedCriterions([...displayedCriterions, value]);
-              }
-            }}
-          />
-        </Toolbar>
+              </select>
+            </Toolbar>
+        }
+        {
+          mode === 'find' &&
+            <Toolbar style={{width: '100%', marginBottom: 40, justifyContent: 'center'}}>
+              <FilterButtons
+                roundedRadius={50}
+                borderWidth={2}
+                style={{width: '90%', fontSize: '2.5rem', height: '7rem'}}
+                buttons={[
+                  {value: 'Confirmés', label: 'Confirmés'},
+                  {value: 'Rétablis', label: 'Rétablis'},
+                  {value: 'Décédés', label: 'Décédés'},
+                  {value: 'Existants', label: 'Existants'}
+                ]}
+                selectedButtons={displayedCriterions}
+                onSwitch={(value) => {
+                  if(displayedCriterions.includes(value)) {
+                    if(displayedCriterions.length > 1) {
+                      setDisplayedCriterions(displayedCriterions.filter(buttonValue => buttonValue !== value));
+                    }
+                  } else {
+                    setDisplayedCriterions([...displayedCriterions, value]);
+                  }
+                }}
+              />
+            </Toolbar>
+        }
+        {
+          mode === 'compare' &&
+            <Toolbar style={{width: '100%', marginBottom: 40, justifyContent: 'center'}}>
+              <FilterButtons
+                roundedRadius={50}
+                borderWidth={2}
+                style={{width: '90%', fontSize: '2.5rem', height: '7rem'}}
+                buttons={[
+                  {value: 'Confirmés', label: 'Confirmés'},
+                  {value: 'Rétablis', label: 'Rétablis'},
+                  {value: 'Décédés', label: 'Décédés'}
+                ]}
+                selectedButtons={compareCriterion}
+                onSwitch={(value) => {
+                  setCompareCriterion(value);
+                }}
+              />
+            </Toolbar>
+        }
       </div>
     );
   }
