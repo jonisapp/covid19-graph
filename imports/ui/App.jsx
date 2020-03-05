@@ -68,8 +68,9 @@ const App = () => {
               selectedButtons={displayedCriterions}
               onSwitch={(value) => {
                 if(displayedCriterions.includes(value)) {
-                  console.log('includes');
-                  setDisplayedCriterions(displayedCriterions.filter(buttonValue => buttonValue !== value));
+                  if(displayedCriterions.length > 1) {
+                    setDisplayedCriterions(displayedCriterions.filter(buttonValue => buttonValue !== value));
+                  }
                 } else {
                   setDisplayedCriterions([...displayedCriterions, value]);
                 }
