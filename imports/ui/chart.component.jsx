@@ -117,15 +117,16 @@ export default class Chart extends PureComponent {
               <YAxis />
               <Tooltip />
               <Legend verticalAlign='top' height={36} />
-              { this.props.mode === 'find' && <Area strokeWidth={2} type="monotone" dataKey="Confirmés" stroke="orange" fill='url(#confirmedColor)' activeDot={{ r: 10 }} /> }
-              { this.props.mode === 'find' &&
+              { this.props.mode === 'find' && this.props.displayedCriterions.includes('Confirmés') &&
+                <Area strokeWidth={2} type="monotone" dataKey="Confirmés" stroke="orange" fill='url(#confirmedColor)' activeDot={{ r: 10 }} /> }
+              { this.props.mode === 'find' && this.props.displayedCriterions.includes('Récupéré') &&
                 <Line strokeWidth={2} type="monotone" dataKey="Récupéré" stroke="#82ca9d" dot={false} />
               }
-              { this.props.mode === 'find' &&
+              { this.props.mode === 'find' && this.props.displayedCriterions.includes('Morts') &&
                 <Line strokeWidth={2} type="monotone" dataKey="Morts" stroke="#db5e5e" dot={false} />
               }
-              { this.props.mode === 'find' &&
-                <Line strokeWidth={1} type="monotone" dataKey="Existants" stroke="#c775ea" dot={false} />
+              { this.props.mode === 'find' && this.props.displayedCriterions.includes('Existants') &&
+                <Line strokeWidth={2} type="monotone" dataKey="Existants" stroke="#c775ea" dot={false} />
               }
               { this.props.mode === 'compare' &&
                 <Line strokeWidth={2} type="monotone" name={`${this.props.land} (${this.props.criterion})`} dataKey="land1" stroke="#c775ea" dot={false} />

@@ -13,6 +13,7 @@ const App = () => {
   const [ selectedLand2, setSelectedLand2 ] = useState('Switzerland');
   const [ compareCriterion, setCompareCriterion ] = useState('Confirmés');
   const [ showSourcesList, setShowSourcesList ] = useState(false);
+  const [ displayedCriterions, setDisplayedCriterions ] = useState(['Confirmés', 'Existants'])
 
   useEffect(() => {
     Meteor.call('getData', (err, resData) => {
@@ -54,6 +55,27 @@ const App = () => {
             setMode(value);
           }}
         />
+        {
+          mode === 'find' &&
+            <FilterButtons
+              style={{width: 400}}
+              buttons={[
+                {value: 'Confirmés', label: 'Confirmés'},
+                {value: 'Récupéré', label: 'Récupéré'},
+                {value: 'Morts', label: 'Morts'},
+                {value: 'Existants', label: 'Existants'}
+              ]}
+              selectedButtons={displayedCriterions}
+              onSwitch={(value) => {
+                if(displayedCriterions.includes(value)) {
+                  console.log('includes');
+                  setDisplayedCriterions(displayedCriterions.filter(buttonValue => buttonValue !== value));
+                } else {
+                  setDisplayedCriterions([...displayedCriterions, value]);
+                }
+              }}
+            />
+        }
         {
           mode === 'compare' &&
             <FilterButtons
@@ -98,7 +120,15 @@ const App = () => {
       <div style={styles.container}>
         {
           data &&
-          <Chart data={data} lands={landsNames} land={selectedLand} land2={selectedLand2} mode={mode} criterion={compareCriterion} />
+          <Chart
+            data={data}
+            lands={landsNames}
+            land={selectedLand}
+            land2={selectedLand2}
+            mode={mode}
+            criterion={compareCriterion}
+            displayedCriterions={displayedCriterions}
+          />
         }
       </div>
       <div style={{marginTop: 40, paddingBottom: 40, textAlign: 'center'}}>
