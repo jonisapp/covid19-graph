@@ -33,8 +33,74 @@ const App = () => {
 
   if(isMobile) {
     return(
-      <div style={{marginTop: 30, width: '100%', fontSize: 18, fontWeight: 'bold', textAlign: 'center', marginLeft: 'auto', marginRight: 'auto'}}>
-        Cette application n'est pas prévue pour s'afficher sur mobile.
+      // <div style={{marginTop: 30, width: '100%', fontSize: 18, fontWeight: 'bold', textAlign: 'center', marginLeft: 'auto', marginRight: 'auto'}}>
+      //   Cette application n'est pas prévue pour s'afficher sur mobile.
+      // </div>
+      <div style={styles.body}>
+        <div style={styles.mobileContainer}>
+          {
+            data &&
+            <Chart
+              data={data}
+              lands={landsNames}
+              land={selectedLand}
+              land2={selectedLand2}
+              mode={mode}
+              criterion={compareCriterion}
+              displayedCriterions={displayedCriterions}
+            />
+          }
+        </div>
+        <Toolbar style={{width: '100%', marginBottom: 40, justifyContent: 'center'}}>
+          <FilterButtons
+            shape='squared'
+            squaredRadius={10}
+            style={{marginTop: 50, width: '50%', height: '6rem', fontSize: '2rem'}}
+            buttons={[
+              {value: 'find', label: 'Trouver'},
+              {value: 'compare', label: 'Comparer'}
+            ]}
+            selectedButtons={mode}
+            onSwitch={(value) => {
+              setMode(value);
+            }}
+          />
+        </Toolbar>
+        <Toolbar style={{width: '100%', marginBottom: 40, justifyContent: 'center'}}>
+          <FilterButtons
+            roundedRadius={50}
+            style={{width: '80%', fontSize: '2rem', height: '6rem'}}
+            buttons={[
+              {value: 'Confirmés', label: 'Confirmés'},
+              {value: 'Rétablis', label: 'Rétablis'},
+              {value: 'Décédés', label: 'Décédés'},
+              {value: 'Existants', label: 'Existants'}
+            ]}
+            selectedButtons={displayedCriterions}
+            onSwitch={(value) => {
+              if(displayedCriterions.includes(value)) {
+                if(displayedCriterions.length > 1) {
+                  setDisplayedCriterions(displayedCriterions.filter(buttonValue => buttonValue !== value));
+                }
+              } else {
+                setDisplayedCriterions([...displayedCriterions, value]);
+              }
+            }}
+          />
+        </Toolbar>
+        <Toolbar style={{width: '100%', marginBottom: 40, justifyContent: 'center'}}>
+          <select
+            value={selectedLand}
+            style={{height: '6rem', fontSize: '2rem', borderRadius: 5, padding: '0.5rem'}}
+            onChange={({ currentTarget: { value } }) => { setSelectedLand(value) }}
+          >
+            {
+              landsNames.map(landKey => (
+                <option key={landKey}>{ landKey }</option>
+              ))
+            }
+          </select>
+        </Toolbar>
       </div>
     );
   }
@@ -174,6 +240,13 @@ const styles = {
     marginLeft: 'auto',
     marginRight: 'auto',
     backgroundColor: 'white'
+  },
+  mobileContainer: {
+    width: '100%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    backgroundColor: 'white',
+    overflowX: 'scroll'
   },
   button: {
     height: 36,

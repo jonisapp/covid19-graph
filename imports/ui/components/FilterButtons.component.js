@@ -1,14 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const FilterButtons = ({ buttons, selectedButtons, onSwitch, style, shape, buttonBorder, buttonBackgroundColor, buttonBorderColor }) => {
+const FilterButtons = ({
+    buttons, selectedButtons, onSwitch, style, shape, buttonBorder, buttonBackgroundColor, buttonBorderColor,
+    roundedRadius, squaredRadius
+  }) => {
   return (
-    <div className='switchButtons' style={{...styles.switchButtons, ...style}}>
+    <div className='switchButtons' style={{...styles.switchButtons, ...style, }}>
       {
         buttons.map(button => {
           return (
             <FilterButton key={button.value}
-              shapeRadius={shape === 'squared' ? 5 : 18}
+              shapeRadius={shape === 'squared' ? squaredRadius : roundedRadius}
               buttonBackgroundColor={buttonBackgroundColor}
               buttonBorderColor={buttonBorderColor}
               style={{display: 'flex', alignItems: 'center', ...(() => {
@@ -58,7 +61,6 @@ cursor: default;
 const styles = {
   switchButtons: {
     display: 'flex',
-    height: 36
   },
   selected: {
     backgroundColor: '#6C757D',
@@ -69,6 +71,8 @@ const styles = {
 
 FilterButtons.defaultProps = {
   shape: 'rounded',
+  roundedRadius: 18,
+  squaredRadius: 5,
   buttonBackgroundColor: '#ddd',
   buttonBorderColor: '#bbb',
   style: {}
