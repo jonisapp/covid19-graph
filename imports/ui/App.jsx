@@ -4,16 +4,18 @@ import styled from 'styled-components';
 import FilterButtons from './components/FilterButtons.component';
 
 import { isMobile } from 'react-device-detect';
+import SearchSelectInput from './components/SearchSelectInput.component';
 
 const App = () => {
   const [ data, setData ] = useState(null);
   const [ landsNames, setLandsNames ] = useState([]);
   const [ mode, setMode ] = useState('find');
+  const [ selectionMode, setSelectionMode ] = useState('search');
   const [ selectedLand, setSelectedLand ] = useState('Mainland China');
   const [ selectedLand2, setSelectedLand2 ] = useState('Switzerland');
   const [ compareCriterion, setCompareCriterion ] = useState('Confirmés');
   const [ showSourcesList, setShowSourcesList ] = useState(false);
-  const [ displayedCriterions, setDisplayedCriterions ] = useState(['Confirmés', 'Existants'])
+  const [ displayedCriterions, setDisplayedCriterions ] = useState(['Confirmés', 'Existants']); console.log(selectedLand);
 
   useEffect(() => {
     Meteor.call('getData', (err, resData) => {
@@ -162,7 +164,7 @@ const App = () => {
           {
             mode === 'find' &&
               <FilterButtons
-                style={{width: 400}}
+                style={{width: 370}}
                 buttons={[
                   {value: 'Confirmés', label: 'Confirmés'},
                   {value: 'Rétablis', label: 'Rétablis'},
@@ -182,6 +184,20 @@ const App = () => {
               />
           }
           {
+            mode === 'find' &&
+              <FilterButtons
+                style={{width: 200}}
+                buttons={[
+                  {value: 'search', label: 'Recherche'},
+                  {value: 'list', label: 'Liste'},
+                ]}
+                selectedButtons={selectionMode}
+                onSwitch={(value) => {
+                  setSelectionMode(value)
+                }}
+              />
+          }
+          {
             mode === 'compare' &&
               <FilterButtons
                 style={{width: 300}}
@@ -196,23 +212,12 @@ const App = () => {
                 }}
               />
           }
-          <select
-            value={selectedLand}
-            style={{height: 36, fontSize: 18, borderRadius: 5}}
-            onChange={({ currentTarget: { value } }) => { setSelectedLand(value) }}
-          >
-            {
-              landsNames.map(landKey => (
-                <option key={landKey}>{ landKey }</option>
-              ))
-            }
-          </select>
-          {
-            mode === 'compare' &&
+          { selectionMode === 'list'
+          ?
             <select
-              value={selectedLand2}
-              style={{height: 36, fontSize: 18, borderRadius: 5}}
-              onChange={({ currentTarget: { value } }) => { setSelectedLand2(value) }}
+              value={selectedLand}
+              style={styles.input}
+              onChange={({ currentTarget: { value } }) => { setSelectedLand(value) }}
             >
               {
                 landsNames.map(landKey => (
@@ -220,6 +225,44 @@ const App = () => {
                 ))
               }
             </select>
+          :
+            <div>
+              <SearchSelectInput
+                style={styles.input}
+                onSearch={(text) => {
+                  if(text !== '') {
+                    const regex = new RegExp(`${text}`, 'i');
+                    return Object.keys(data).filter(key => regex.test(key))
+                    .map(key => {
+                      return {
+                        value: key,
+                        label: key
+                      }
+                    })
+                    .slice(0, 15);
+                  } else { return [] }
+                }}
+                onSelect={(key) => {
+                  setSelectedLand(key);
+                }}
+              />
+            </div>
+          }
+          {
+            mode === 'compare' &&
+            <React.Fragment>
+              <select
+                value={selectedLand2}
+                style={{height: 36, fontSize: 18, borderRadius: 5}}
+                onChange={({ currentTarget: { value } }) => { setSelectedLand2(value) }}
+              >
+                {
+                  landsNames.map(landKey => (
+                    <option key={landKey}>{ landKey }</option>
+                  ))
+                }
+              </select>
+            </React.Fragment>
           }
         </Toolbar>
         <div style={styles.container}>
@@ -237,7 +280,10 @@ const App = () => {
               />
             : 
             <div style={{width: '100%', height: 530, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-              <img src="/spinner.svg" alt="spinner"/>
+              <img style={{color: 'green'}} src="/spinner.svg" alt="spinner"/>
+              <svg>
+                <path  />
+              </svg>
             </div>
           }
         </div>
@@ -294,17 +340,25 @@ const styles = {
     backgroundColor: 'white',
     overflowX: 'scroll'
   },
-  button: {
+  input: {
+    boxSizing: 'border-box',
     height: 36,
+    fontSize: 18,
+    borderRadius: 5,
     outline: 'none',
-    borderStyle: 'solid',
-    borderColor: '#b4b2c1',
-    borderWidth: 1,
-    backgroundColor: '#D0CEE0',
-    color: '#313172',
-    opacity: 1,
-    textShadow: '0px 1px 2px #f5f4f9'
+    width: 210
   },
+  // button: {
+  //   height: 36,
+  //   outline: 'none',
+  //   borderStyle: 'solid',
+  //   borderColor: '#b4b2c1',
+  //   borderWidth: 1,
+  //   backgroundColor: '#D0CEE0',
+  //   color: '#313172',
+  //   opacity: 1,
+  //   textShadow: '0px 1px 2px #f5f4f9'
+  // },
   sourcesList: {
     marginLeft: 'auto',
     marginRight: 'auto',
