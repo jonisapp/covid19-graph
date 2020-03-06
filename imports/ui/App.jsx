@@ -143,75 +143,63 @@ const App = () => {
   }
 
   return(
-    <div style={styles.body}>
-      <div style={{height: 40}} />
-      <Toolbar style={{width: 1100, marginLeft: 'auto', marginRight: 'auto', marginBottom: 40}}>
-        <FilterButtons
-          shape='squared'
-          style={{width: 200}}
-          buttons={[
-            {value: 'find', label: 'Trouver'},
-            {value: 'compare', label: 'Comparer'}
-          ]}
-          selectedButtons={mode}
-          onSwitch={(value) => {
-            setMode(value);
-          }}
-        />
-        {
-          mode === 'find' &&
-            <FilterButtons
-              style={{width: 400}}
-              buttons={[
-                {value: 'Confirmés', label: 'Confirmés'},
-                {value: 'Rétablis', label: 'Rétablis'},
-                {value: 'Décédés', label: 'Décédés'},
-                {value: 'Existants', label: 'Existants'}
-              ]}
-              selectedButtons={displayedCriterions}
-              onSwitch={(value) => {
-                if(displayedCriterions.includes(value)) {
-                  if(displayedCriterions.length > 1) {
-                    setDisplayedCriterions(displayedCriterions.filter(buttonValue => buttonValue !== value));
-                  }
-                } else {
-                  setDisplayedCriterions([...displayedCriterions, value]);
-                }
-              }}
-            />
-        }
-        {
-          mode === 'compare' &&
-            <FilterButtons
-              style={{width: 300}}
-              buttons={[
-                {value: 'Confirmés', label: 'Confirmés'},
-                {value: 'Rétablis', label: 'Rétablis'},
-                {value: 'Décédés', label: 'Décédés'}
-              ]}
-              selectedButtons={compareCriterion}
-              onSwitch={(value) => {
-                setCompareCriterion(value);
-              }}
-            />
-        }
-        <select
-          value={selectedLand}
-          style={{height: 36, fontSize: 18, borderRadius: 5}}
-          onChange={({ currentTarget: { value } }) => { setSelectedLand(value) }}
-        >
+    <React.Fragment>
+      <div style={styles.body}>
+        <div style={{height: 40}} />
+        <Toolbar style={{width: 1100, marginLeft: 'auto', marginRight: 'auto', marginBottom: 40}}>
+          <FilterButtons
+            shape='squared'
+            style={{width: 200}}
+            buttons={[
+              {value: 'find', label: 'Trouver'},
+              {value: 'compare', label: 'Comparer'}
+            ]}
+            selectedButtons={mode}
+            onSwitch={(value) => {
+              setMode(value);
+            }}
+          />
           {
-            landsNames.map(landKey => (
-              <option key={landKey}>{ landKey }</option>
-            ))
+            mode === 'find' &&
+              <FilterButtons
+                style={{width: 400}}
+                buttons={[
+                  {value: 'Confirmés', label: 'Confirmés'},
+                  {value: 'Rétablis', label: 'Rétablis'},
+                  {value: 'Décédés', label: 'Décédés'},
+                  {value: 'Existants', label: 'Existants'}
+                ]}
+                selectedButtons={displayedCriterions}
+                onSwitch={(value) => {
+                  if(displayedCriterions.includes(value)) {
+                    if(displayedCriterions.length > 1) {
+                      setDisplayedCriterions(displayedCriterions.filter(buttonValue => buttonValue !== value));
+                    }
+                  } else {
+                    setDisplayedCriterions([...displayedCriterions, value]);
+                  }
+                }}
+              />
           }
-        </select>
-        {
-          mode === 'compare' &&
+          {
+            mode === 'compare' &&
+              <FilterButtons
+                style={{width: 300}}
+                buttons={[
+                  {value: 'Confirmés', label: 'Confirmés'},
+                  {value: 'Rétablis', label: 'Rétablis'},
+                  {value: 'Décédés', label: 'Décédés'}
+                ]}
+                selectedButtons={compareCriterion}
+                onSwitch={(value) => {
+                  setCompareCriterion(value);
+                }}
+              />
+          }
           <select
-            value={selectedLand2}
+            value={selectedLand}
             style={{height: 36, fontSize: 18, borderRadius: 5}}
-            onChange={({ currentTarget: { value } }) => { setSelectedLand2(value) }}
+            onChange={({ currentTarget: { value } }) => { setSelectedLand(value) }}
           >
             {
               landsNames.map(landKey => (
@@ -219,24 +207,43 @@ const App = () => {
               ))
             }
           </select>
-        }
-      </Toolbar>
-      <div style={styles.container}>
-        {
-          data &&
-          <Chart
-            data={data}
-            lands={landsNames}
-            land={selectedLand}
-            land2={selectedLand2}
-            mode={mode}
-            criterion={compareCriterion}
-            displayedCriterions={displayedCriterions}
-          />
-        }
+          {
+            mode === 'compare' &&
+            <select
+              value={selectedLand2}
+              style={{height: 36, fontSize: 18, borderRadius: 5}}
+              onChange={({ currentTarget: { value } }) => { setSelectedLand2(value) }}
+            >
+              {
+                landsNames.map(landKey => (
+                  <option key={landKey}>{ landKey }</option>
+                ))
+              }
+            </select>
+          }
+        </Toolbar>
+        <div style={styles.container}>
+          {
+            data
+            ?
+              <Chart
+                data={data}
+                lands={landsNames}
+                land={selectedLand}
+                land2={selectedLand2}
+                mode={mode}
+                criterion={compareCriterion}
+                displayedCriterions={displayedCriterions}
+              />
+            : 
+            <div style={{width: '100%', height: 530, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+              <img src="/spinner.svg" alt="spinner"/>
+            </div>
+          }
+        </div>
       </div>
-      <div style={{marginTop: 40, paddingBottom: 40, textAlign: 'center'}}>
-        Les données proviennent de Johns Hopkins University CSSE <a href='#' onClick={toggleSourcesListHandler}>(liste des sources)</a> - Certaines statistiques sont susceptibles d'être inexactes (sources multiples) voire absentes.<br />
+      <div style={{marginTop: 40, textAlign: 'center', color: '#e3e5ef'}}>
+        Les données proviennent de Johns Hopkins University CSSE <a href='#' style={styles.link} onClick={toggleSourcesListHandler}>(liste des sources)</a> - Certaines statistiques sont susceptibles d'être inexactes (sources multiples) voire absentes.<br />
         { showSourcesList &&
           <div style={styles.sourcesList}> 
             <ul>
@@ -258,19 +265,21 @@ const App = () => {
           </div>
         }
         <br />Avez-vous besoin d'un développeur polyvalent ? (web, mobile, server)
-        <a style={{marginLeft: 10}} href='mailto:zappala.jonathan@gmail.com'>zappala.jonathan@gmail.com</a>&nbsp;-&nbsp;
-        <a href="https://www.linkedin.com/in/jonathan-zappala-575a8b14b/">LinkedIn</a>&nbsp;-&nbsp;
-        <a href='https://www.malt.fr/profile/jonathanzappala'>Malt</a>&nbsp;-&nbsp;
-        <a href='https://www.facebook.com/jonathan.zappala.9'>Facebook</a>
+        <a style={{marginLeft: 10, color: '#c6fff7'}} href='mailto:zappala.jonathan@gmail.com'>zappala.jonathan@gmail.com</a>&nbsp;-&nbsp;
+        <a style={styles.link} href="https://www.linkedin.com/in/jonathan-zappala-575a8b14b/">LinkedIn</a>&nbsp;-&nbsp;
+        <a style={styles.link} href='https://www.malt.fr/profile/jonathanzappala'>Malt</a>&nbsp;-&nbsp;
+        <a style={styles.link} href='https://www.facebook.com/jonathan.zappala.9'>Facebook</a>
       </div>
-    </div>
+    </React.Fragment>
   );
 };
 
 const styles = {
   body: {
     backgroundColor: '#f4f5f9',
-    height: '100%'
+    height: '100%',
+    paddingBottom: 60,
+    borderRadius: 10
   },
   container: {
     width: 1100,
@@ -306,7 +315,11 @@ const styles = {
     borderStyle: 'solid',
     borderColor: '#cccfdd',
     borderWidth: 1,
-    backgroundColor: 'white'
+    backgroundColor: '#F4F5F9',
+    color: '#444'
+  },
+  link: {
+    color: '#c6fff7'
   }
 };
 
