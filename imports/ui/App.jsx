@@ -261,7 +261,7 @@ const App = () => {
               >
                 {
                   landsNames.map(landKey => (
-                    <option key={landKey}>{ landKey }</option>
+                    <option key={landKey} value={landKey}>{ landKey } ({ data[landKey][data[landKey].length-1]['Confirmés'] })</option>
                   ))
                 }
               </select>
@@ -289,7 +289,9 @@ const App = () => {
         </div>
       </div>
       <div style={{marginTop: 40, textAlign: 'center', color: '#e3e5ef'}}>
-        Les données proviennent de Johns Hopkins University CSSE <a href='#' style={styles.link} onClick={toggleSourcesListHandler}>(liste des sources)</a> - Certaines statistiques sont susceptibles d'être inexactes (sources multiples) voire absentes.<br />
+        Les données proviennent de Johns Hopkins University CSSE (
+        <a id='source' href='#source' style={styles.link} onClick={toggleSourcesListHandler}>sources</a>,&nbsp;
+        <a style={styles.link} href='https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_daily_reports'>données</a>) - Certaines statistiques sont susceptibles d'être inexactes (sources multiples) voire absentes.<br />
         { showSourcesList &&
           <div style={styles.sourcesList}> 
             <ul>
@@ -310,11 +312,39 @@ const App = () => {
             </ul>
           </div>
         }
-        <br />Avez-vous besoin d'un développeur polyvalent ? (web, mobile, server)
+        <br />Vous êtes à la recherche d'un développeur ? (web, mobile, server)
         <a style={{marginLeft: 10, color: '#c6fff7'}} href='mailto:zappala.jonathan@gmail.com'>zappala.jonathan@gmail.com</a>&nbsp;-&nbsp;
         <a style={styles.link} href="https://www.linkedin.com/in/jonathan-zappala-575a8b14b/">LinkedIn</a>&nbsp;-&nbsp;
         <a style={styles.link} href='https://www.malt.fr/profile/jonathanzappala'>Malt</a>&nbsp;-&nbsp;
         <a style={styles.link} href='https://www.facebook.com/jonathan.zappala.9'>Facebook</a>
+        <div style={{marginTop: 50, width: 640, textAlign: 'left', marginLeft: 'auto', marginRight: 'auto'}}>
+        <h4 style={{textAlign: 'center'}}>Informations concernant l'utilisation de cette application</h4>
+        Les données présentées ici appartiennent au domaine public et sont fournies sans garantie d'aucune sorte.
+        L'exploitation de ces informations par l'intermédiaire de cette application est strictement réservé à un usage éducatif et à la recherche.
+        Un usage dans un cadre médical ou à des fins commerciales est strictement interdit.
+        La licence exposée ci-dessous concerne l'application à proprement parler (code et fonctionnalités), en aucun cas les données présentées.
+        </div>
+        <div style={{padding: 20, marginTop: 50, textAlign: 'justify', backgroundColor: 'rgba(0, 0, 0, 0.25)', border: '1px solid #576068', color: '#e3e5ef'}}>
+          <div style={{textAlign: 'center'}}>Covid19-graph application MIT License © 2020 Jonathan Zappalà</div>
+          <br />
+          Permission is hereby granted, free of charge, to any person obtaining a copy
+          of this software and associated documentation files (the "Software"), to deal
+          in the Software without restriction, including without limitation the rights
+          to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+          copies of the Software, and to permit persons to whom the Software is
+          furnished to do so, subject to the following conditions:
+
+          The above copyright notice and this permission notice shall be included in all
+          copies or substantial portions of the Software.
+
+          THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+          IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+          FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+          AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+          LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+          OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+          SOFTWARE.
+        </div>
       </div>
     </React.Fragment>
   );
