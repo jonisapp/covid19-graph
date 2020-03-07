@@ -15,7 +15,7 @@ const App = () => {
   const [ selectedLand2, setSelectedLand2 ] = useState('Switzerland');
   const [ compareCriterion, setCompareCriterion ] = useState('Confirmés');
   const [ showSourcesList, setShowSourcesList ] = useState(false);
-  const [ displayedCriterions, setDisplayedCriterions ] = useState(['Confirmés', 'Existants']); console.log(selectedLand);
+  const [ displayedCriterions, setDisplayedCriterions ] = useState(['Confirmés', 'Existants']);
 
   useEffect(() => {
     Meteor.call('getData', (err, resData) => {
@@ -25,7 +25,10 @@ const App = () => {
       });
       console.log(resData);
       setData(resData);
-      setLandsNames(landsNames_arr.sort((a, b) => a < b ? -1 : 1));
+      console.log(landsNames_arr);
+      const c = landsNames_arr[0];
+      console.log(c)
+      setLandsNames(landsNames_arr.sort((a, b) => resData[a][resData[a].length-1]['Confirmés'] < resData[b][resData[b].length-1]['Confirmés'] ? 1 : -1));
     });
   }, []);
 
@@ -212,7 +215,7 @@ const App = () => {
                 }}
               />
           }
-          { selectionMode === 'list'
+          { selectionMode === 'list' || mode === 'compare'
           ?
             <select
               value={selectedLand}
@@ -221,7 +224,7 @@ const App = () => {
             >
               {
                 landsNames.map(landKey => (
-                  <option key={landKey}>{ landKey }</option>
+                  <option key={landKey} value={landKey}>{ landKey } ({ data[landKey][data[landKey].length-1]['Confirmés'] })</option>
                 ))
               }
             </select>
@@ -281,9 +284,6 @@ const App = () => {
             : 
             <div style={{width: '100%', height: 530, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
               <img style={{color: 'green'}} src="/spinner.svg" alt="spinner"/>
-              <svg>
-                <path  />
-              </svg>
             </div>
           }
         </div>
@@ -346,7 +346,7 @@ const styles = {
     fontSize: 18,
     borderRadius: 5,
     outline: 'none',
-    width: 210
+    width: 230
   },
   // button: {
   //   height: 36,
