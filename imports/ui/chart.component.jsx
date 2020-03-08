@@ -3,6 +3,7 @@ import {
   Area, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ComposedChart, ResponsiveContainer
 } from 'recharts';
 
+import moment from 'moment';
 import { isMobile } from 'react-device-detect';
 
 const criterionsTitles = {
@@ -50,7 +51,7 @@ export default class Chart extends PureComponent {
   }
 
   correctValue(currentValue, previousValue) {
-    if(currentValue && currentValue >= previousValue) {
+    if(currentValue && currentValue !== 0) {
       return currentValue;
     } else {
       return previousValue;
@@ -59,15 +60,41 @@ export default class Chart extends PureComponent {
 
   cleanLandData(landData_arr) {
     var landDataByDates = {};
-    landData_arr.forEach(item => {
+    let previousDate = new Date(landData_arr[0].date);
+    // landData_arr.forEach(item => console.log(`${item.date}`));
+    landData_arr.forEach((item, i) => {
+      let currentDate = new Date(item.date);
+      const differenceInDaysFromPreviousDate = (currentDate.getTime() - previousDate.getTime()) / (1000 * 3600 * 24);
       if(typeof landDataByDates[item.date] === 'undefined') {
         landDataByDates[item.date] = item;
       }
+      if(differenceInDaysFromPreviousDate > 1) {
+        for(let j = 1; j < differenceInDaysFromPreviousDate; ++j) {
+          const tmp_date = new Date(currentDate.getTime());
+          tmp_date.setDate(tmp_date.getDate() - j);
+          let tmp_date_isoFormat = moment(tmp_date).format('YYYY-MM-DD');
+          const confirmedInterpolationShare = (item['Confirmés'] - landData_arr[(i - 1)]['Confirmés']) / differenceInDaysFromPreviousDate;
+          const recoveredInterpolationShare = (item['Rétablis'] - landData_arr[(i - 1)]['Rétablis']) / differenceInDaysFromPreviousDate;
+          const deathsInterpolationShare = (item['Décédés'] - landData_arr[(i - 1)]['Décédés']) / differenceInDaysFromPreviousDate;
+          const confirmed = parseInt(item['Confirmés'] - (j * confirmedInterpolationShare));
+          const recovered = parseInt(item['Rétablis'] - (j * recoveredInterpolationShare));
+          const deaths = parseInt(item['Décédés'] - (j * deathsInterpolationShare));
+          landDataByDates[tmp_date_isoFormat] = {
+            ...item,
+            date: tmp_date_isoFormat,
+            'Confirmés': confirmed,
+            'Rétablis': recovered,
+            'Décédés' : deaths,
+            'Existants': confirmed - recovered - deaths
+          };
+        }
+      }
+      previousDate = currentDate;
     });
     let landPreviousConfirmedValue = 0;
     let landPreviousRecoveredValue = 0;
     let landPreviousDeathsValue = 0;
-    return Object.keys(landDataByDates).map(key => {
+    const cleanedData = Object.keys(landDataByDates).map(key => {
       landPreviousConfirmedValue = this.correctValue(landDataByDates[key]['Confirmés'], landPreviousConfirmedValue);
       landPreviousRecoveredValue = this.correctValue(landDataByDates[key]['Rétablis'], landPreviousRecoveredValue);
       landPreviousDeathsValue = this.correctValue(landDataByDates[key]['Décédés'], landPreviousDeathsValue);
@@ -79,6 +106,7 @@ export default class Chart extends PureComponent {
         'Existants': landPreviousConfirmedValue - landPreviousRecoveredValue - landPreviousDeathsValue
       }
     });
+    return cleanedData.sort((a, b) => a.date < b.date ? -1 : 1);
   }
 
   render() {

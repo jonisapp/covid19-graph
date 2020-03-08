@@ -21,13 +21,12 @@ const App = () => {
     Meteor.call('getData', (err, resData) => {
       var landsNames_arr = [];
       Object.keys(resData).forEach(key => {
-        landsNames_arr.push(key);
+        if(key !== 'undefined') {
+          landsNames_arr.push(key);
+        }
       });
-      console.log(resData);
       setData(resData);
-      console.log(landsNames_arr);
       const c = landsNames_arr[0];
-      console.log(c)
       setLandsNames(landsNames_arr.sort((a, b) => resData[a][resData[a].length-1]['Confirmés'] < resData[b][resData[b].length-1]['Confirmés'] ? 1 : -1));
     });
   }, []);
@@ -317,9 +316,9 @@ const App = () => {
         <a style={styles.link} href="https://www.linkedin.com/in/jonathan-zappala-575a8b14b/">LinkedIn</a>&nbsp;-&nbsp;
         <a style={styles.link} href='https://www.malt.fr/profile/jonathanzappala'>Malt</a>&nbsp;-&nbsp;
         <a style={styles.link} href='https://www.facebook.com/jonathan.zappala.9'>Facebook</a>
-        <div style={{marginTop: 50, width: 640, textAlign: 'left', marginLeft: 'auto', marginRight: 'auto'}}>
+        <div style={{marginTop: 50, maxWidth: 640, textAlign: 'left', marginLeft: 'auto', marginRight: 'auto'}}>
         <h4 style={{textAlign: 'center'}}>Informations concernant l'utilisation de cette application</h4>
-        Les données présentées ici appartiennent au domaine public et sont fournies sans garantie d'aucune sorte.
+        Les données présentées ici appartiennent au domaine public et sont fournies sans aucune garantie.
         L'exploitation de ces informations par l'intermédiaire de cette application est strictement réservé à un usage éducatif et à la recherche.
         Un usage dans un cadre médical ou à des fins commerciales est strictement interdit.
         La licence exposée ci-dessous concerne l'application à proprement parler (code et fonctionnalités), en aucun cas les données présentées.
