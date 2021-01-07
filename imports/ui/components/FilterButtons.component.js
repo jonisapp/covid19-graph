@@ -3,8 +3,20 @@ import styled from 'styled-components';
 
 const FilterButtons = ({
     buttons, selectedButtons, onSwitch, style, shape, buttonBorder, buttonBackgroundColor, buttonBorderColor,
-    roundedRadius, squaredRadius, borderWidth
+    roundedRadius, squaredRadius, borderWidth, selectedButtonBackgroundColor
   }) => {
+
+  const styles = {
+    switchButtons: {
+      display: 'flex',
+    },
+    selected: {
+      backgroundColor: selectedButtonBackgroundColor,
+      color: 'white',
+      textShadow: 'none'
+    }
+  }
+
   return (
     <div className='switchButtons' style={{...styles.switchButtons, ...style, }}>
       {
@@ -49,26 +61,29 @@ cursor: default;
 
 &:first-child {
   padding-left: 14px;
+  border-left: ${({borderWidth}) => borderWidth}px solid #bbb;
+  border-left-color: ${({buttonBorderColor}) => buttonBorderColor};
   border-radius: ${({shapeRadius}) => shapeRadius}px 0 0 ${({shapeRadius}) => shapeRadius}px;
 }
 
 &:last-child {
   padding-right: 14px;
   border-right: ${({borderWidth}) => borderWidth}px solid #bbb;
+  border-right-color: ${({buttonBorderColor}) => buttonBorderColor};
   border-radius: 0 ${({shapeRadius}) => shapeRadius}px ${({shapeRadius}) => shapeRadius}px 0;
 }
 `;
 
-const styles = {
-  switchButtons: {
-    display: 'flex',
-  },
-  selected: {
-    backgroundColor: '#6C757D',
-    color: 'white',
-    textShadow: 'none'
-  }
-}
+// const styles = {
+//   switchButtons: {
+//     display: 'flex',
+//   },
+//   selected: {
+//     backgroundColor: '#6C757D',
+//     color: 'white',
+//     textShadow: 'none'
+//   }
+// }
 
 FilterButtons.defaultProps = {
   shape: 'rounded',
@@ -77,6 +92,7 @@ FilterButtons.defaultProps = {
   borderWidth: 1,
   buttonBackgroundColor: '#ddd',
   buttonBorderColor: '#bbb',
+  selectedButtonBackgroundColor: '#6C757D',
   style: {}
 }
 

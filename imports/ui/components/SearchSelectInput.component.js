@@ -9,6 +9,8 @@ const SearchSelectInput = ({ onSearch, onSelect, onReset, style }) => {
 
   const [ inputValue, setInputValue ] = useState('');
 
+  console.log(results);
+
   useEffect(() => {
     if(selected) {
       onSelect(selected);
@@ -30,7 +32,7 @@ const SearchSelectInput = ({ onSearch, onSelect, onReset, style }) => {
     setInputValue(label)
   };
 
-  const onChangeHandler = (value) => {console.log(value);
+  const onChangeHandler = (value) => {
     setInputValue(selected ? '' : value);
     setResults(selected ? [] : onSearch(value));
     if(selected) {
@@ -88,7 +90,7 @@ const styles = {
     width: '100%'
   },
   results: {
-    zIndex: 10,
+    zIndex: 11,
     position: 'absolute',
     marginTop: -1,
     minWidth: '100%',
